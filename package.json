@@ -3,5 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "rhkdgns9489@gmail.com <rhkdgns9489@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "graphql": "^14.5.8",
+    "graphql-yoga": "^1.18.3",
+    "nodemon": "^1.19.2",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
+  },
+  "scripts": {
+    "dev": "cd src && nodemon -e ts --exec ts-node index"
+  }
 }
