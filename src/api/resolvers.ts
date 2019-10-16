@@ -18,7 +18,20 @@ const MutationStartForGrouping = {
     StartForGrouping: privateResolvers( async (_, args: StartForGroupingMutationArgs, {req}): Promise<StartForGroupingMutationResponse> => {
         const { groupId } = args;
         const grouping: Grouping = req.grouping[groupId];
-        console.log("StartForGrouping!");
+        console.log("StartForGrouping!", req.grouping[groupId]);
+        const { pdf, sendEmail, redirect, restful } = grouping;
+        if(pdf.isChecked) {
+            console.log("PDF 작업수행");
+        }
+        if(sendEmail.isChecked) {
+            console.log("Send Email 작업수행");
+        }
+        if(restful.isChecked) {
+            console.log("RESTFul 작업수행");
+        }
+        if(redirect.isChecked) {
+            console.log("Redirect 작업 수행");
+        }
         return {
             ok: true,
             error: null,

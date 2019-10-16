@@ -2,6 +2,26 @@ type Grouping = {
     groupName: string;
     pdf: {
         isChecked: boolean;
+        filePath: string;
+        fileName: string;
+    },
+    sendEmail: {
+        isChecked: boolean;
+        email: string;
+        password: string;
+        mailTitle: string;
+        mailContent: string;
+    },
+    restful: {
+        isChecked: boolean;
+        isLogging: boolean;
+        isSendFile: boolean;
+        data: string;
+    },
+    redirect: {
+        isChecked: boolean;
+        ipAddress: string;
+        port: string;
     }
 }
 export interface StartForGroupingMutationArgs {

@@ -1,8 +1,11 @@
 import { GraphQLServer } from "graphql-yoga";
 import typeDefs from "./api/schema";
 import resolvers from "./api/resolvers";
-import { Request, Response, NextFunction } from "express";
-
+import { Response, NextFunction } from "express";
+import cors from "cors";
+// import logger from "morgan";
+import decodeGrouping from "./utils/decodeGrouping";
+import helmet from "helmet";
 
 class App {
     public app: GraphQLServer;
@@ -10,7 +13,7 @@ class App {
         this.app = new GraphQLServer({
             typeDefs,
             resolvers,
-            context: req => {
+        context: req => {
                 return {
                     req: req.request
                 }
@@ -19,6 +22,8 @@ class App {
         this.middlewares();
     }
     private middlewares = () => {
+        this.app.express.use(cors());
+        this.app.express.use(helmet());
         this.app.express.use(this.upload);
     }
     // upload
@@ -26,8 +31,13 @@ class App {
     private upload = (req, res: Response, next: NextFunction) => {
         const GroupingText = req.get("X-GROUPING");
         if(GroupingText) {
-            const GroupingArray = JSON.parse(GroupingText);
-            req.grouping = GroupingArray;
+            const GroupingArray = decodeGrouping(GroupingText);
+            if(GroupingArray) {
+                console.log("있다.");
+                req.grouping = GroupingArray;
+            } else {
+                console.log("없다.");
+            }
         }
         
         next();

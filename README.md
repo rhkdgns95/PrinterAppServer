@@ -1,6 +1,12 @@
 # Install
 1. yarn add graphql-yoga graphql
 2. yarn add ts-node nodemon 
+3. yarn add cors @types/cors
+4. yarn add babel-cli --dev
+* babel참고 https://gompro.postype.com/post/1699968 
+5. yarn add @babel/core @babel/node @babel/preset-env --dev
+6. yarn add helmet morgan cors
+7. yarn add @types/cors @types/helmet @types/morgan --dev
 
 # API
 - [X] AppOptions

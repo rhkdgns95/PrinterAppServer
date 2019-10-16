@@ -5,13 +5,25 @@
   "author": "rhkdgns9489@gmail.com <rhkdgns9489@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@types/cors": "^2.8.6",
+    "cors": "^2.8.5",
     "graphql": "^14.5.8",
     "graphql-yoga": "^1.18.3",
+    "helmet": "^3.21.1",
+    "morgan": "^1.9.1",
     "nodemon": "^1.19.2",
     "ts-node": "^8.4.1",
     "typescript": "^3.6.3"
   },
   "scripts": {
     "dev": "cd src && nodemon -e ts --exec ts-node index"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/node": "^7.6.3",
+    "@babel/preset-env": "^7.6.3",
+    "@types/helmet": "^0.0.44",
+    "@types/morgan": "^1.7.37",
+    "babel-cli": "^6.26.0"
   }
 }
