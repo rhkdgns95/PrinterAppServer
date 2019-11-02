@@ -1,0 +1,24 @@
+//! 아직 사용하면 안됨.
+class Mail {
+    mail_server    :ExtArg<string> = new ExtArg("default");
+    sender_id      :ExtArg<string> = new ExtArg("default");
+    sender_pw      :ExtArg<string> = new ExtArg("default");
+    file_name_gen  :ExtArg<string> = new ExtArg("default");
+    mail_name_gen  :ExtArg<string> = new ExtArg("default");
+    mail_body_gen  :ExtArg<string> = new ExtArg("default");
+
+    constructor(arg){
+        if(arg){
+            this.mail_server    = new ExtArg(arg.mail_server);
+            this.sender_id      = new ExtArg(arg.sender_id);
+            this.sender_pw      = new ExtArg(arg.sender_pw);
+            this.file_name_gen  = new ExtArg(arg.file_name_gen);
+            this.mail_name_gen  = new ExtArg(arg.mail_name_gen);
+            this.mail_body_gen  = new ExtArg(arg.mail_body_gen);
+        }
+    }
+
+    print (doc: Doc){
+        
+    }
+}

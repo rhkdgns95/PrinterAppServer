@@ -9,6 +9,7 @@ type Grouping = {
         isChecked: boolean;
         email: string;
         password: string;
+        destinationEmails: string;
         mailTitle: string;
         mailContent: string;
     },

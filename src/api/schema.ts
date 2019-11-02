@@ -9,6 +9,7 @@ const Grouping = `
         email: String!
         password: String!
         mailTitle: String!
+        destinationEmails: String!
         mailContent: String!
     }
     type RestFul {

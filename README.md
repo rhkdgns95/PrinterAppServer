@@ -7,7 +7,8 @@
 5. yarn add @babel/core @babel/node @babel/preset-env --dev
 6. yarn add helmet morgan cors
 7. yarn add @types/cors @types/helmet @types/morgan --dev
-
+8. yarn add steno
+9. yarn add pify object-hash nodemailer lowdb lodash is-promise graceful-fs 
 # API
 - [X] AppOptions
 - [X] AppStart

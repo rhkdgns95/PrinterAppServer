@@ -20,7 +20,8 @@
     "noEmit": true,
     "jsx": "react",
     "noImplicitAny": false,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "downlevelIteration": true
   },
   "include": [
     "src"

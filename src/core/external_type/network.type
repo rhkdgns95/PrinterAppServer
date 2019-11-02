@@ -1,0 +1,20 @@
+import net from "net";
+
+class Network {
+    host  :ExtArg<string> = new ExtArg("default");
+    port  :ExtArg<number> = new ExtArg(9100);
+
+    constructor(arg){
+        if(arg){
+            this.host  = new ExtArg(arg.host);
+            this.port  = new ExtArg(arg.port);
+        }
+    }
+
+    print (doc: Doc){
+        let net_printer = net.connect({host:this.host, port:this.port}, function () {
+            net_printer.write(doc.val.postscript);
+            net_printer.destroy();
+        });
+    }
+}

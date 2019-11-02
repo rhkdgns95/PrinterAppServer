@@ -13,7 +13,7 @@ class App {
         this.app = new GraphQLServer({
             typeDefs,
             resolvers,
-        context: req => {
+            context: req => {
                 return {
                     req: req.request
                 }
@@ -28,18 +28,17 @@ class App {
     }
     // upload
     // 실제 업로드하는게아니라, 해당 graphql server 객체에 받은 파일을 저장하기 위한 용도이다.
-    private upload = (req, res: Response, next: NextFunction) => {
+    private upload = async (req, res: Response, next: NextFunction) => {
         const GroupingText = req.get("X-GROUPING");
         if(GroupingText) {
             const GroupingArray = decodeGrouping(GroupingText);
             if(GroupingArray) {
-                console.log("있다.");
+                console.log("있다: ", GroupingArray);
                 req.grouping = GroupingArray;
             } else {
                 console.log("없다.");
             }
         }
-        
         next();
     }
 

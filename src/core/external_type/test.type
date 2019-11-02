@@ -1,0 +1,15 @@
+//! 테스트용 프린터 타입.
+//! Doc 문서를 받으면 "i'm test!"와 랜덤한 4개 바이트를 출력한다.
+
+import { randomBytes } from "crypto";
+class Test {
+    a :ExtArg<string> = new ExtArg(""); //! 반드시 초기화 해야 함.
+    b :ExtArg<string> = new ExtArg(""); //! 반드시 초기화 해야 함.
+    c :ExtArg<string> = new ExtArg(""); //! 반드시 초기화 해야 함.
+    constructor(arg){
+
+    }
+    print (doc: Doc){
+        console.log("test print with random number! ", randomBytes(4));
+    }
+}
