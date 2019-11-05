@@ -11,7 +11,8 @@ class PrinterManager_Type {
     /**
      * 외부 type 소스가 저장되어 있는 폴더를 지정한다.
      */
-    private static readonly path: string = "./external_type/";
+    // private static readonly path: string = "../../external_type/";
+    private static readonly path: string = `${__dirname}/../../external_type/`;
 
     /**
      * 이 클래스는 static으로만 사용해야 한다.
@@ -60,7 +61,14 @@ class PrinterManager_Type {
     static _get_types(): Map<string, any> {
         if (!this.type_list.size) {
             let clone: Map<string, any> = new Map();
-            const list: string[] = fs.readdirSync(this.path);
+            let list: string[] = [];
+            try {
+                console.log(__dirname + "../../");
+                list = fs.readdirSync(this.path);    
+            } catch(error) {
+                console.log("ERROR: ", error.message);
+            }
+            // const list: string[] = fs.readdirSync(this.path);
 
             for (let f of list) {
                 let contents: string = fs

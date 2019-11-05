@@ -31,20 +31,34 @@ const Grouping = `
         redirect: Redirect!
     }
 `;
+const typeGetDocs = `
+    type Docs {
+        accepted: Float!
+        title: String!
+        preview_url: String!
+    }
+    
+    type GetDocsResponse {
+        ok: Boolean!
+        error: String
+        docs: [Docs]
+    }
+`;
 const typeDefs = `
     ${Grouping}
+    ${typeGetDocs}
     type StartForGroupingResponse {
         ok: Boolean!
         error: String
         grouping: Grouping
+        message: String
     }
     type Query {
         GetTest: String
+        GetDocs: GetDocsResponse!
     }
     type Mutation {
-        StartForGrouping(
-            groupId: Int!
-        ): StartForGroupingResponse!
+        StartForGrouping(groupId: Int!): StartForGroupingResponse!
     }
 `;
 

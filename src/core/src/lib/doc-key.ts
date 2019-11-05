@@ -5,7 +5,7 @@ class DocKey {
     public readonly accepted: number;
     public readonly title: string;
     public readonly preview_url: string;
-
+    
     /**
      *
      * @param accepted      이 문서가 수신되기 시작한 시각.

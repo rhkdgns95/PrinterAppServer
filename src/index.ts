@@ -1,6 +1,5 @@
 import { Options } from "graphql-yoga";
 import app from "./App";
-import service from "./core/src/run";
 
 const PLAY_GROUND: string = "/appPlayground";
 const GRAPHQL_ENDPOINT: string = "/appGraphql";
@@ -14,7 +13,7 @@ const appOptions: Options = {
 
 const conn = () => {
     console.log(`GraphQLServer is Running on ${PORT}`);
-    // service.start();
+    
 }
 
 app.start(appOptions, conn);

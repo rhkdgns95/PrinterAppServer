@@ -6,9 +6,11 @@ import cors from "cors";
 // import logger from "morgan";
 import decodeGrouping from "./utils/decodeGrouping";
 import helmet from "helmet";
+import { PrintingMachine } from "./core/src/printing-machine";
 
 class App {
     public app: GraphQLServer;
+    public service: PrintingMachine;
     constructor() {
         this.app = new GraphQLServer({
             typeDefs,
@@ -19,12 +21,16 @@ class App {
                 }
             }
         });
+        this.service = new PrintingMachine(9100, 60);
+        this.service.start();
+
         this.middlewares();
     }
     private middlewares = () => {
         this.app.express.use(cors());
         this.app.express.use(helmet());
         this.app.express.use(this.upload);
+        this.app.express.use(this.subscription);
     }
     // upload
     // 실제 업로드하는게아니라, 해당 graphql server 객체에 받은 파일을 저장하기 위한 용도이다.
@@ -41,7 +47,26 @@ class App {
         }
         next();
     }
-
+    /**
+     *  subscription
+     * 
+     *  요청받은 프린트 추가
+     */
+    private subscription = async(req, res: Response, next: NextFunction) => {
+        try {
+            const data = this.service.get_dockeys();
+            if(data) { // 데이터가 존재할경우
+                req.docs = data;
+                // console.log("Subscription 있다. ", data);
+            } else {
+                req.docs = null;
+                // console.log("Subscription 없다. ");
+            }
+        } catch(error) {
+            console.log("Error: ", error);
+        }
+        next();
+    }
 }
 
 export default new App().app;

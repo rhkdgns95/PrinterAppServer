@@ -1,3 +1,5 @@
+import { DocKey } from "../core/src/lib/doc-key";
+
 type Grouping = {
     groupName: string;
     pdf: {
@@ -32,4 +34,11 @@ export interface StartForGroupingMutationResponse {
     ok: boolean;
     error: string | null;
     grouping: Grouping | null;
+    message: string | null;
+}
+
+export interface GetDocsResponse {
+    ok: boolean;
+    error: string | null;
+    docs: Array<DocKey> | null;
 }
