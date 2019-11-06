@@ -9,10 +9,15 @@
 7. yarn add @types/cors @types/helmet @types/morgan --dev
 8. yarn add steno
 9. yarn add pify object-hash nodemailer lowdb lodash is-promise graceful-fs 
+
 # API
 - [X] AppOptions
 - [X] AppStart
 - [ ] execute
+
+# TIP
+- GhostScript 참고
+: https://stackoverflow.com/questions/21624741/gpl-ghostscript-9-10-could-not-open-temporary-file-unable-to-open
 
 # ETC
 - 실행: $ yarn dev 
@@ -37,3 +42,5 @@
 1. client에서 setHeader({})로 localStorage의 값을 Graphql의 Context로 받을수 있도록한다. => 확인
 2. server에서는 해당 Grouping의 ID를 가지고와서 몇번째값인지 확인 하도록 한다. OR 배열의 index가아니라, grouping Name으로 확인이 가능하다.
 3. 2번을 마치고 실행 StartForGrouping을 완성시킨뒤, Client에게 Return되는 데이터를 작성한다.
+
+

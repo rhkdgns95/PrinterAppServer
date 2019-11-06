@@ -1,8 +1,8 @@
 import * as TYPESCRIPT from "typescript";
 import fs from "fs";
-import { ExtArg } from "./ext-arg";
+import { PrinterArg } from "./printer-arg";
 import { Printer } from "./printer";
-import { FileStorage } from "./file-storage";
+import { Storage } from "./storage";
 
 /**
  * 프린터 타입을 관리하는 매니저.
@@ -11,7 +11,6 @@ class PrinterManager_Type {
     /**
      * 외부 type 소스가 저장되어 있는 폴더를 지정한다.
      */
-    // private static readonly path: string = "../../external_type/";
     private static readonly path: string = `${__dirname}/../../external_type/`;
 
     /**
@@ -35,7 +34,7 @@ class PrinterManager_Type {
         let loaded: any;
         let ts_code: string = `
         import { PrinterType } from "./printer-type";
-        import { ExtArg } from "./ext-arg";
+        import { PrinterArg } from "./printer-arg";
         import { Doc } from "./doc";
         ${type_code.replace("class", "loaded = class")}
         `;
@@ -61,14 +60,7 @@ class PrinterManager_Type {
     static _get_types(): Map<string, any> {
         if (!this.type_list.size) {
             let clone: Map<string, any> = new Map();
-            let list: string[] = [];
-            try {
-                console.log(__dirname + "../../");
-                list = fs.readdirSync(this.path);    
-            } catch(error) {
-                console.log("ERROR: ", error.message);
-            }
-            // const list: string[] = fs.readdirSync(this.path);
+            const list: string[] = fs.readdirSync(this.path);
 
             for (let f of list) {
                 let contents: string = fs
@@ -84,7 +76,7 @@ class PrinterManager_Type {
 
     /**
      * 주어진 타입, 또는 객체가 요구하는 파라미터 리스트를 가져온다.
-     * 초기화된 ExtArg<> 멤버만 가져올 수 있으므로 주의하자.
+     * 초기화된 PrinterArg<> 멤버만 가져올 수 있으므로 주의하자.
      *
      * 이미 만들어진 객체를 넘겨줘서 알아낼 수 있고,
      * 생성자를 넘겨서도 알아낼 수 있다.
@@ -99,7 +91,7 @@ class PrinterManager_Type {
         let it_member_names = Object.getOwnPropertyNames(it);
         it_args.set("name", "".constructor.name);
         for (let member_name of it_member_names) {
-            if (it_desc[member_name].value.constructor != ExtArg) continue;
+            if (it_desc[member_name].value.constructor != PrinterArg) continue;
             it_args.set(member_name, it_desc[member_name].value!!.type_name());
         }
         return it_args;
@@ -114,7 +106,7 @@ class PrinterManager_Printer {
     /**
      * args 데이터가 저장되는 스토리지.
      */
-    private static storage = new FileStorage<any>("./printer.json");
+    private static storage = new Storage<any>("./printer.json");
 
     /**
      * static으로만 사용할 것.
@@ -185,9 +177,9 @@ class PrinterManager_Printer {
         let refined_args = this._refine_args(args);
         if (!this.storage._is_exist(refined_args)) {
             this.storage._write(refined_args);
-            console.log("added!");
+            console.log("new printer added!");
         } else {
-            console.log("add fail : already exist.");
+            console.log("printer add fail : already exist.");
         }
     }
 
@@ -200,9 +192,9 @@ class PrinterManager_Printer {
         let refined_args = this._refine_args(args);
         if (this.storage._is_exist(refined_args)) {
             this.storage._remove(refined_args);
-            console.log("removed!");
+            console.log("printer removed!");
         } else {
-            console.log("remove fail : no exist.");
+            console.log("printer remove fail : no exist.");
         }
     }
 

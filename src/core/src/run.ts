@@ -2,6 +2,7 @@ import { Printer } from "./lib/printer";
 import { Doc } from "./lib/doc";
 import { PrintingMachine } from "./printing-machine";
 import { PrinterManager } from "./lib/printer-manager";
+import { readFileSync } from "fs";
 
 /**
  * (1) 프린터 매니저 구성요소.
@@ -51,10 +52,10 @@ for (let type of all_types) {
  * (3-1) 올바른 args를 통해 프린터 객체 생성하기.
  * type과 name은 필수.
  */
-let test_doc: Doc = new Doc(123456789, "Hello, World!");
+let test_doc: Doc = new Doc(123456789, readFileSync(`${__dirname}/sample.ps`).toString());
 let good_args = {
     type: "Test",
-    name: "Test",
+    name: "Hello, Printer!",
     a: "x",
     b: "y",
     c: "z"
@@ -85,7 +86,7 @@ let bad_args = {
  */
 PRINTERS._is_exist_args(good_args);
 PRINTERS._add_args(good_args);
-PRINTERS._del_args(good_args);
+//PRINTERS._del_args(good_args);
 
 /**
  * (5) 파일에 쓰여있는 모든 args 가져오기.
@@ -104,6 +105,7 @@ for (let args of all_args) {
 /**
  * (6) 서비스 시작하기.
  */
-let service = new PrintingMachine(9100, 60);
+// let service = new PrintingMachine(9100, 60);
 // service.start();
-export default service;
+
+export default new PrintingMachine(9100, 60);

@@ -20,17 +20,17 @@ class PrintingMachine {
         let buffer_map: Map<Net.Socket, Buffer[]> = new Map();
         let socket_server = Net.createServer(client => {
             client
+                //! 데이터 수신 중...
                 .on("data", data => {
-                    //! 데이터 수신 중...
                     if (accept_map.get(client) == undefined) {
                         let now = new Date().getTime();
                         accept_map.set(client, now);
                         buffer_map.set(client, []);
                         console.log(`[${now}] start receiving.`);
-                    } else {
-                        buffer_map.get(client)!!.push(data);
                     }
+                    buffer_map.get(client)!!.push(data);
                 })
+                //! 데이터 수신 완료...
                 .on("end", () => {
                     if (buffer_map.get(client)!!.length != 0) {
                         console.log(
@@ -42,7 +42,6 @@ class PrintingMachine {
                             when_accepted!!,
                             new Doc(when_accepted!!, postscript)
                         );
-                        // console.log(postscript);
                     } else {
                         console.log(
                             `[${accept_map.get(client)}] ignore. it's empty.`

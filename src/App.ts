@@ -7,6 +7,7 @@ import cors from "cors";
 import decodeGrouping from "./utils/decodeGrouping";
 import helmet from "helmet";
 import { PrintingMachine } from "./core/src/printing-machine";
+import service from "./core/src/run";
 
 class App {
     public app: GraphQLServer;
@@ -21,7 +22,7 @@ class App {
                 }
             }
         });
-        this.service = new PrintingMachine(9100, 60);
+        this.service = service;
         this.service.start();
 
         this.middlewares();

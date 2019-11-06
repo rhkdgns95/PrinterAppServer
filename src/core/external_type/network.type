@@ -1,13 +1,13 @@
 import net from "net";
 
 class Network {
-    host  :ExtArg<string> = new ExtArg("default");
-    port  :ExtArg<number> = new ExtArg(9100);
+    host  :PrinterArg<string> = new PrinterArg("default");
+    port  :PrinterArg<number> = new PrinterArg(9100);
 
     constructor(arg){
         if(arg){
-            this.host  = new ExtArg(arg.host);
-            this.port  = new ExtArg(arg.port);
+            this.host  = new PrinterArg(arg.host);
+            this.port  = new PrinterArg(arg.port);
         }
     }
 

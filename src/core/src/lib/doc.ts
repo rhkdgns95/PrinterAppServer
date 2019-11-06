@@ -14,10 +14,15 @@ class Doc {
      * @param postscript  해당 문서의 내용.
      */
     constructor(when_accept: number, postscript: string) {
-        let title = "";
-        let preview_url = "";
-        this.key = new DocKey(when_accept, title, preview_url);
         this.val = new DocVal(postscript);
+
+        let match = /%%Title: [^\n]+/.exec(postscript);
+        let title = "untitle";
+        if (match) {
+            title = match[0].substr(8);
+        }
+        let preview_path = this.val.preview_path;
+        this.key = new DocKey(when_accept, title, preview_path);
     }
 }
 export { Doc };
