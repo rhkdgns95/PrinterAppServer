@@ -13,16 +13,15 @@ import { ChildProcess, execSync } from "child_process";
  */
 const ConvertWindowPath = (path: string): string => {
     if(path.indexOf("/") != -1) {
-        // PATH가 window 형식가 아닌경우,
+        /* PATH가 window 형식가 아닌경우 */
         var windowPath: string = path.replace(/\//gi, "\\");
         if(path.indexOf("mnt") != -1) {
             windowPath = windowPath.replace("\\mnt\\c", "C:");
         }
-
         // console.log("FULLPATH: ", windowPath);
         return windowPath;
     } else {
-        // PATH가 window 형식인 경우,
+        /* PATH가 window 형식인 경우 */
         return path;
     }
 }
@@ -44,12 +43,9 @@ class DocVal {
      */
     constructor(postscript: string) {
         this.id = randomBytes(15).join("");
-        // this.id = "5822019125118412871623312569223211130126";
         this.postscript = postscript;
         this.pdf_path = this.get_pdf();
-        
         this.preview_path = this.get_preview();
-        
     }
     /**
      * pdf 파일을 생성한다.
@@ -57,8 +53,8 @@ class DocVal {
     private get_pdf(): string {
         let input_path: string = `${this.base_folder}${this.id}`;
         let output_path: string = `${this.base_folder}${this.id}.pdf`;
+        let command = `${this.base_folder}../../bin/gswin32c.exe -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -o "${ConvertWindowPath(output_path)}" -f "${ConvertWindowPath(input_path)}"`;
         try {
-            let command = `${this.base_folder}../../bin/gswin32c.exe -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -o "${ConvertWindowPath(output_path)}" -f "${ConvertWindowPath(input_path)}"`;
             writeFileSync(input_path, this.postscript);
             execSync(command);
         } catch(error) {
@@ -73,13 +69,12 @@ class DocVal {
     private get_preview(): string {
         let output_path: string = `${this.base_folder}${this.id}.jpg`;
         let command = `${this.base_folder}../../bin/gswin32c.exe -dNOPAUSE -sDEVICE=jpeg -r144 -dFirstPage=1 -dLastPage=1 -o "${ConvertWindowPath(output_path)}" -f "${ConvertWindowPath(this.pdf_path)}"`;
-
         try {
             execSync(command);
         } catch(error) {
             console.log("ERROR: ", error.message);
         }
-        return output_path;
+        return ConvertWindowPath(output_path);
     }
     /**
      * 이 문서와 관련된 파일을 전부 삭제한다.

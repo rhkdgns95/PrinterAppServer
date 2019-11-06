@@ -35,7 +35,7 @@ const typeGetDocs = `
     type Docs {
         accepted: Float!
         title: String!
-        preview_url: String!
+        preview_path: String!
     }
     
     type GetDocsResponse {
