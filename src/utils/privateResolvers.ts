@@ -1,5 +1,5 @@
 import { Grouping } from "../types/types";
-import { DocKey } from "../core/src/lib/doc-key";
+import { DocKey } from "../lib/doc-key";
 
 export const privateResolvers = resolvers => (parent, args, context, info) => {
     try {

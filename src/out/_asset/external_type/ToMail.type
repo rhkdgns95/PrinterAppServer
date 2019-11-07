@@ -1,0 +1,48 @@
+import * as mailer from "nodemailer";
+
+class ToMail {
+    mail_server    :PrinterArg = new PrinterArg("");
+    sender_id      :PrinterArg = new PrinterArg("");
+    sender_pw      :PrinterArg = new PrinterArg("");
+    receiver_id    :PrinterArg = new PrinterArg("");
+    file_name      :PrinterArg = new PrinterArg("");
+    mail_name      :PrinterArg = new PrinterArg("");
+    mail_body      :PrinterArg = new PrinterArg("");
+
+    print (doc: Doc){
+        //! create mail-server session.
+        let transporter = mailer.createTransport({
+            host: this.mail_server.value(),
+            port: 465,
+            secure: true, //! use TLS
+            auth: {
+                user: this.sender_id.value(),
+                pass: this.sender_pw.value()
+            }
+        });
+
+        //! create mail.
+        let mail : mailer.SendMailOptions = {
+            from: this.sender_id.value(),
+            to: this.receiver_id.value(),
+            subject: this.mail_name.value(),
+            text: this.mail_body.value(),
+            attachments: [
+                {
+                    filename: this.file_name.value(),
+                    path: doc.val.pdf_path;
+                }
+            ]
+        };
+
+        //! send mail.
+        transporter.sendMail(mail, function(error, info){
+            if(error){
+                console.log(error);
+            }
+            else {
+                console.log("메일 보냄.");
+            }
+        });
+    }
+}

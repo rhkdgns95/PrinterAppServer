@@ -1,7 +1,7 @@
 /**
  * 문서를 식별할 수 있는 키.
  */
-class DocKey {
+export class DocKey {
     public readonly accepted: number;
     public readonly title: string;
     public readonly preview_path: string;
@@ -18,4 +18,3 @@ class DocKey {
         this.preview_path = preview_path;
     }
 }
-export { DocKey };

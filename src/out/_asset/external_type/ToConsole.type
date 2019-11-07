@@ -1,8 +1,5 @@
 //! Doc 문서를 표준출력으로 내보내는 프린터 타입.
 class ToConsole {
-    constructor(arg){
-
-    }
     print (doc: Doc){
         console.log(doc.key);
         console.log(doc.val);

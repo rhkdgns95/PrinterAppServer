@@ -1,0 +1,13 @@
+import net from "net";
+
+class ToSocket {
+    host  :PrinterArg = new PrinterArg("default");
+    port  :PrinterArg = new PrinterArg("9100");
+
+    print (doc: Doc){
+        let net_printer = net.connect({host:this.host, port:Number(this.port)}, function () {
+            net_printer.write(doc.val.postscript);
+            net_printer.destroy();
+        });
+    }
+}

@@ -1,6 +1,8 @@
 import { Doc } from "./doc";
 import { PrinterManager } from "./printer-manager";
-import { ExtArg } from "./ext-arg";
+import { PrinterArg } from "./printer-arg";
+import { randomBytes } from "crypto";
+import { readFileSync } from "fs";
 
 /**
  * 실제 프린터 객체.
@@ -9,7 +11,7 @@ export class Printer {
     /**
      * 이 프린터 객체의 이름.
      */
-    name: ExtArg<string> = new ExtArg("");
+    name: PrinterArg = new PrinterArg("");
 
     /**
      * 주어진 args를 이용하여 Printer 객체를 동적으로 재구성한다.
@@ -23,9 +25,9 @@ export class Printer {
          * 정의되지 않은 프린터 타입인 경우 익셉션을 발생시킨다.
          */
         let type_list = PrinterManager._TYPES._get_types();
-        let type_name = args["type"];
+        let type_name = args["printer_type"];
         let type: any = type_list.get(type_name);
-        if (!type) throw `no such type "${type_name}"`;
+        if (!type) throw `존재하지 않는 프린터 타입 -> "${type_name}"`;
         let require_args = PrinterManager._TYPES._require_args_of(type);
 
         /**
@@ -34,41 +36,21 @@ export class Printer {
          * 필요없는 인자는 필터링한다.
          */
         let self: any = this;
-        for (let require_info of require_args) {
-            //! 요구되는 파라미터 정보.
-            let require_arg_name = require_info[0];
-            let require_arg_type = require_info[1];
-
+        for (let arg_name of require_args) {
             //! 해당 파라미터 값을 얻어낸 뒤,
-            let require_arg_value = args[require_arg_name];
-            if (!require_arg_value) throw `need ${require_arg_name}`;
+            let require_arg_value = args[arg_name];
+            if (!require_arg_value) throw `need ${arg_name}`;
 
             //! 동적으로 멤버를 만들어내어 할당한다.
-            switch (require_arg_type) {
-                case "string":
-                case "String":
-                    self[require_arg_name] = new ExtArg<string>(
-                        require_arg_value
-                    );
-                    break;
-
-                case "number":
-                case "Number":
-                    self[require_arg_name] = new ExtArg<number>(
-                        require_arg_value
-                    );
-                    break;
-
-                default:
-                    throw `no such type ${require_arg_type}`;
-            }
-            self[require_arg_name].assign(require_arg_value);
+            self[arg_name] = new PrinterArg(require_arg_value);
         }
 
         /**
          * print 메소드를 옮겨쓴다.
          */
-        this.print = type!!.prototype!!.print;
+        if (type!!.prototype!!.print) {
+            this.print = type!!.prototype!!.print;
+        }
     }
 
     /**

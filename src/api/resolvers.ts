@@ -1,9 +1,9 @@
 import { StartForGroupingMutationArgs, StartForGroupingMutationResponse, Grouping, GetDocsResponse, PopDoc } from "../types/types";
 import { privateResolvers } from "../utils/privateResolvers";
-import { DocKey } from "../core/src/lib/doc-key";
-import { Doc } from "../core/src/lib/doc";
-import { Printer } from "../core/src/lib/printer";
-import { PrinterManager } from "../core/src/lib/printer-manager";
+import { DocKey } from "../lib/doc-key";
+import { Doc } from "../lib/doc";
+import { Printer } from "../lib/printer";
+import { PrinterManager } from "../lib/printer-manager";
 
 type Resolver = (parent: any, args: any, context: any, info: any) => any;
 

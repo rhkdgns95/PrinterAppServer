@@ -19,33 +19,30 @@ class PrintingMachine {
         let accept_map: Map<Net.Socket, number> = new Map();
         let buffer_map: Map<Net.Socket, Buffer[]> = new Map();
         let socket_server = Net.createServer(client => {
-            client
+        client
                 //! 데이터 수신 중...
                 .on("data", data => {
-                    if (accept_map.get(client) == undefined) {
-                        let now = new Date().getTime();
-                        accept_map.set(client, now);
+                    let timestamp: number | undefined = accept_map.get(client);
+
+                    if (timestamp == undefined) {
+                        let timestamp = new Date().getTime();
+                        accept_map.set(client, timestamp);
                         buffer_map.set(client, []);
-                        console.log(`[${now}] start receiving.`);
+                        console.log(`[${timestamp}] start receiving.`);
                     }
                     buffer_map.get(client)!!.push(data);
                 })
                 //! 데이터 수신 완료...
                 .on("end", () => {
-                    if (buffer_map.get(client)!!.length != 0) {
-                        console.log(
-                            `[${accept_map.get(client)}] receiving completed.`
-                        );
-                        let postscript = buffer_map.get(client)!!.join("");
-                        let when_accepted = accept_map.get(client);
-                        this.waiting_doc.set(
-                            when_accepted!!,
-                            new Doc(when_accepted!!, postscript)
-                        );
+                    let timestamp: number = accept_map.get(client)!!;
+                    let postscript: string = buffer_map.get(client)!!.join("");
+
+                    if (postscript.length != 0) {
+                        let doc: Doc = new Doc(timestamp, postscript);
+                        this.waiting_doc.set(timestamp, doc);
+                        console.log(`[${timestamp}] receiving completed.`);
                     } else {
-                        console.log(
-                            `[${accept_map.get(client)}] ignore. it's empty.`
-                        );
+                        console.log(`[${timestamp}] ignore. it's empty.`);
                     }
                 });
         });

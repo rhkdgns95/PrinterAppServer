@@ -4,7 +4,7 @@ import { DocVal } from "./doc-val";
 /**
  * 프린트 요청된 문서 정보를 담고있는 객체.
  */
-class Doc {
+export class Doc {
     public readonly key: DocKey; //! 문서를 식별할 수 있는 키
     public readonly val: DocVal; //! 문서의 내용
 
@@ -17,7 +17,7 @@ class Doc {
         this.val = new DocVal(postscript);
 
         let match = /%%Title: [^\n]+/.exec(postscript);
-        let title = "untitle";
+        let title = when_accept + "untitled.pdf";
         if (match) {
             title = match[0].substr(8);
         }
@@ -25,4 +25,3 @@ class Doc {
         this.key = new DocKey(when_accept, title, preview_path);
     }
 }
-export { Doc };

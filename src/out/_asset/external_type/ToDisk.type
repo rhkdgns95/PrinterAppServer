@@ -1,16 +1,11 @@
 //! 주어진 경로에 PDF 파일을 저장하는 프린터 타입
 import { writeFileSync, readFileSync, mkdirSync, rmdirSync } from "fs";
 class ToDisk {
-    path :PrinterArg<string> = new PrinterArg("");
-
-    constructor(arg){
-        if(arg){
-            this.path = new PrinterArg(arg.path);
-        }
-    }
+    file_path :PrinterArg = new PrinterArg("");
+    file_name :PrinterArg = new PrinterArg("");
 
     print (doc: Doc){
-        let out: string = this.path.value() + doc.key.title;
+        let out: string = this.file_path.value() + this.file_name.value();
         let pdf: string = readFileSync(doc.val.pdf_path.toString());
         mkdirSync(out, {recursive: true});
         rmdirSync(out);

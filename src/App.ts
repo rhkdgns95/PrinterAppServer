@@ -6,8 +6,8 @@ import cors from "cors";
 // import logger from "morgan";
 import decodeGrouping from "./utils/decodeGrouping";
 import helmet from "helmet";
-import { PrintingMachine } from "./core/src/printing-machine";
-import service from "./core/src/run";
+import { PrintingMachine } from "./printing-machine";
+import service from "./run";
 
 class App {
     public app: GraphQLServer;

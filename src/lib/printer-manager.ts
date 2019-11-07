@@ -11,7 +11,7 @@ class PrinterManager_Type {
     /**
      * 외부 type 소스가 저장되어 있는 폴더를 지정한다.
      */
-    private static readonly path: string = `${__dirname}/../../external_type/`;
+    private static readonly path: string = `${__dirname}/../out/_asset/external_type/`;
 
     /**
      * 이 클래스는 static으로만 사용해야 한다.
@@ -84,15 +84,17 @@ class PrinterManager_Type {
      *
      * @param o 요구 파라미터 정보를 알아낼 생성자|만들어진 객체.
      */
-    static _require_args_of(o: any): Map<string, string> {
+    static _require_args_of(o: any): Array<string> {
         let it: any = typeof o == "function" ? new o() : o;
-        let it_args: Map<string, string> = new Map();
+        console.log("it: ", it);
+        let it_args: Array<string> = new Array<string>();
+        console.log("ITE_ARGS" , it_args);
         let it_desc = Object.getOwnPropertyDescriptors(it);
         let it_member_names = Object.getOwnPropertyNames(it);
-        it_args.set("name", "".constructor.name);
+        it_args.push("printer_name");
         for (let member_name of it_member_names) {
             if (it_desc[member_name].value.constructor != PrinterArg) continue;
-            it_args.set(member_name, it_desc[member_name].value!!.type_name());
+            it_args.push(member_name);
         }
         return it_args;
     }
@@ -106,7 +108,7 @@ class PrinterManager_Printer {
     /**
      * args 데이터가 저장되는 스토리지.
      */
-    private static storage = new Storage<any>("./printer.json");
+    private static storage = new Storage<any>(`${__dirname}/../out/_asset/printer.json`);
 
     /**
      * static으로만 사용할 것.
@@ -139,7 +141,7 @@ class PrinterManager_Printer {
          * 해당 프린터 매개변수가 원하는 프린터 타입을 가져온다.
          * 정의되지 않은 프린터 타입인 경우 익셉션이 발생한다.
          */
-        let type_name = args["type"];
+        let type_name = args["printer_type"];
         let type = type_list.get(type_name!!);
         let require_args = PrinterManager_Type._require_args_of(type);
 
@@ -179,7 +181,7 @@ class PrinterManager_Printer {
             this.storage._write(refined_args);
             console.log("new printer added!");
         } else {
-            console.log("printer add fail : already exist.");
+            console.log("already exist.");
         }
     }
 

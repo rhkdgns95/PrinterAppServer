@@ -1,5 +1,5 @@
 import { randomBytes } from "crypto";
-import { writeFileSync, writeFile } from "fs";
+import { writeFileSync, writeFile, mkdirSync, rmdirSync } from "fs";
 import { ChildProcess, execSync } from "child_process";
 
 /**
@@ -30,7 +30,7 @@ const ConvertWindowPath = (path: string): string => {
  * 문서의 내용
  */
 class DocVal {
-    private readonly base_folder = `${__dirname}/temp/`;
+    private readonly base_folder = `${__dirname}/../out/_asset/converted/`;
 
     public readonly id: string;
     public readonly postscript: string;
@@ -53,8 +53,10 @@ class DocVal {
     private get_pdf(): string {
         let input_path: string = `${this.base_folder}${this.id}`;
         let output_path: string = `${this.base_folder}${this.id}.pdf`;
-        let command = `${this.base_folder}../../bin/gswin32c.exe -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -o "${ConvertWindowPath(output_path)}" -f "${ConvertWindowPath(input_path)}"`;
+        let command = `${this.base_folder}../bin/gswin32c.exe -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -o "${ConvertWindowPath(output_path)}" -f "${ConvertWindowPath(input_path)}"`;
         try {
+            mkdirSync(input_path, { recursive: true });
+            rmdirSync(input_path);
             writeFileSync(input_path, this.postscript);
             execSync(command);
         } catch(error) {
@@ -68,8 +70,10 @@ class DocVal {
      */
     private get_preview(): string {
         let output_path: string = `${this.base_folder}${this.id}.jpg`;
-        let command = `${this.base_folder}../../bin/gswin32c.exe -dNOPAUSE -sDEVICE=jpeg -r144 -dFirstPage=1 -dLastPage=1 -o "${ConvertWindowPath(output_path)}" -f "${ConvertWindowPath(this.pdf_path)}"`;
+        let command = `${this.base_folder}../bin/gswin32c.exe -dNOPAUSE -sDEVICE=jpeg -r144 -dFirstPage=1 -dLastPage=1 -o "${ConvertWindowPath(output_path)}" -f "${ConvertWindowPath(this.pdf_path)}"`;
         try {
+            mkdirSync(output_path, { recursive: true });
+            rmdirSync(output_path);
             execSync(command);
         } catch(error) {
             console.log("ERROR: ", error.message);
