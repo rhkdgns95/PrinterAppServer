@@ -108,4 +108,4 @@ for (let args of all_args) {
 // let service = new PrintingMachine(9100, 60);
 // service.start();
 
-export default new PrintingMachine(9100, 60);
+export default new PrintingMachine(9100, 600);

@@ -24,7 +24,7 @@ class App {
         });
         this.service = service;
         this.service.start();
-
+       
         this.middlewares();
     }
     private middlewares = () => {
@@ -40,10 +40,10 @@ class App {
         if(GroupingText) {
             const GroupingArray = decodeGrouping(GroupingText);
             if(GroupingArray) {
-                console.log("있다: ", GroupingArray);
+                // console.log("있다: ", GroupingArray);
                 req.grouping = GroupingArray;
             } else {
-                console.log("없다.");
+                // console.log("없다.");
             }
         }
         next();
@@ -58,6 +58,7 @@ class App {
             const data = this.service.get_dockeys();
             if(data) { // 데이터가 존재할경우
                 req.docs = data;
+                req.pop_doc = this.service.pop_doc;
                 // console.log("Subscription 있다. ", data);
             } else {
                 req.docs = null;

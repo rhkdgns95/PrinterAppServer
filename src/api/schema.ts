@@ -58,7 +58,10 @@ const typeDefs = `
         GetDocs: GetDocsResponse!
     }
     type Mutation {
-        StartForGrouping(groupId: Int!): StartForGroupingResponse!
+        StartForGrouping(
+            groupId: Int!
+            accepted: Float!    
+        ): StartForGroupingResponse!
     }
 `;
 

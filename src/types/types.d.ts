@@ -1,4 +1,5 @@
 import { DocKey } from "../core/src/lib/doc-key";
+import { Doc } from "../core/src/lib/doc";
 
 type Grouping = {
     groupName: string;
@@ -29,6 +30,7 @@ type Grouping = {
 }
 export interface StartForGroupingMutationArgs {
     groupId: number;
+    accepted: number;
 }
 export interface StartForGroupingMutationResponse {
     ok: boolean;
@@ -42,3 +44,5 @@ export interface GetDocsResponse {
     error: string | null;
     docs: Array<DocKey> | null;
 }
+
+export type PopDoc = (docKey: DocKey) => Doc;
