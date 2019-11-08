@@ -9,6 +9,7 @@
 7. yarn add @types/cors @types/helmet @types/morgan --dev
 8. yarn add steno
 9. yarn add pify object-hash nodemailer lowdb lodash is-promise graceful-fs 
+10. yarn add image-data-uri
 
 # API
 - [X] AppOptions
@@ -18,6 +19,8 @@
 # TIP
 - GhostScript 참고
 : https://stackoverflow.com/questions/21624741/gpl-ghostscript-9-10-could-not-open-temporary-file-unable-to-open
+- local file preview
+: 로컬이미지를 프론트에서 보여줄때, 보안상 브라우저애서 로컬영역으로 접근이 불가능하다. 이런점으로 yarn add image-data-uri를 설치하여 로컬 이미지 경로를 encoding방식으로 변경시켜서 접근할 수 있도록 해준다.
 
 # ETC
 - 실행: $ yarn dev 

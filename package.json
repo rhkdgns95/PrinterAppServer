@@ -11,6 +11,7 @@
     "graphql": "^14.5.8",
     "graphql-yoga": "^1.18.3",
     "helmet": "^3.21.1",
+    "image-data-uri": "^2.0.1",
     "is-promise": "^2.1.0",
     "lodash": "^4.17.15",
     "lowdb": "^1.0.0",
