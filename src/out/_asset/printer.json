@@ -150,6 +150,57 @@
       "file_name": "73641144119218210419524020843204122145120.jpg",
       "mail_name": "hello",
       "mail_body": "nono"
+    },
+    "0aaf525a1cdee7ce391590001d56e9c2cfe5ea6d": {
+      "printer_type": "ToDisk",
+      "printer_name": "test - PDF",
+      "file_path": "work/",
+      "file_name": "myTest"
+    },
+    "869745eee94e6ff970891d32df690ffc453ad000": {
+      "printer_type": "ToMail",
+      "printer_name": "test - Send Email",
+      "mail_server": "smtp.naver.com",
+      "sender_id": "t",
+      "sender_pw": "etee",
+      "receiver_id": "e",
+      "file_name": "2461091389176651889213311510620021322146.jpg",
+      "mail_name": "ttet",
+      "mail_body": "tet"
+    },
+    "1f5fe4b388752fd66b8f78dc8e62440c798e48e6": {
+      "printer_type": "ToMail",
+      "printer_name": "test - Send Email",
+      "mail_server": "smtp.naver.com",
+      "sender_id": "rhkdgns95@naver.com",
+      "sender_pw": "rhkdgns175",
+      "receiver_id": "rhkdgns95@naver.com",
+      "file_name": "1511709165159651021804276441561172936.jpg",
+      "mail_name": "hello my work!!",
+      "mail_body": "Hello world.!"
+    },
+    "3ee3c1209aba86599dd3183cdd307f40fdf177db": {
+      "printer_type": "ToMail",
+      "printer_name": "test - Send Email",
+      "mail_server": "smtp.naver.com",
+      "sender_id": "rhkdgns95@naver.com",
+      "sender_pw": "rhkdgns175",
+      "receiver_id": "rhkdgns95@naver.com",
+      "file_name": "12118072118198183438514931202231343189.jpg",
+      "mail_name": "hello my work!!",
+      "mail_body": "Hello world.!"
+    },
+    "001424a7edadcb3e22d85484a146b81666927767": {
+      "printer_type": "ToPost",
+      "printer_name": "test - RESTFul",
+      "end_point": "https://ptsv2.com/t/ubdjt-1573385771/post",
+      "func_code": "(doc) => {\nreturn {\n result: \"KKH\"\n}\n}\n"
+    },
+    "1f0b6a8d5a2e35dfcf05bcc00dacda2af0f8203f": {
+      "printer_type": "ToSocket",
+      "printer_name": "test - Redirect",
+      "host": "127.0.0.1",
+      "port": "4000"
     }
   }
 }

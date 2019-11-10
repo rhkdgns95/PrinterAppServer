@@ -100,10 +100,13 @@ const QueryGetDocs = {
 const isNullArgs = async (args: object): Promise<boolean> => {
     let isNull: boolean = false;
     await Object.keys(args).forEach(key => {
-        if(args[key] === "")
+        if(args[key] === "") {
             isNull = true;
+            return isNull;
+        }
     });
-
+    console.log("ARGS: ", args);
+    console.log("ISNULL: ", isNull);
     return isNull;
 }
 const writeArgs = async (Printers: any, args: any, doc: Doc) => {
@@ -138,66 +141,87 @@ const MutationStartForGrouping = {
                 const { pdf, sendEmail, redirect, restful } = grouping;
                 
                 let message: string = "";
-    
+                
                 if(pdf.isChecked) {
                     taskCount += 1;
-                    const argsPdf = {
-                        printer_type: "ToDisk",
-                        printer_name: `${ groupName } - PDF`,
-                        file_path: pdf.filePath,
-                        file_name: pdf.fileName
-                        /* 누락: file name. */
-                    }
-                    message += `Operation PDF [ `;
-                    try {
-                        await writeArgs(Printers, argsPdf, removedDoc);
-                        message += "Success";
-                    } catch(error) {
+                    message += "Operation PDF [ "
+                    if(await isNullArgs(pdf)) {
                         isOk = false;
                         failedCnt += 1;
-                        message += error.message + "\n";
+                        message += "Data is Empty"
+                    } else {
+                        const argsPdf = {
+                            printer_type: "ToDisk",
+                            printer_name: `${ groupName } - PDF`,
+                            file_path: pdf.filePath,
+                            file_name: pdf.fileName
+                            /* 누락: file name. */
+                        }
+                        try {
+                            await writeArgs(Printers, argsPdf, removedDoc);
+                            message += "Success";
+                        } catch(error) {
+                            isOk = false;
+                            failedCnt += 1;
+                            message += error.message + "\n";
+                        }
                     }
+                    
                     message += ` ].  ` + "\n";
                 }
                 if(sendEmail.isChecked) {
                     taskCount += 1;
                     message += `Operation SendEmail [ `;
-                    const argsSendEmail = {
-                        printer_type: "ToMail",
-                        printer_name: `${ groupName } - Send Email`,
-                        mail_server: "smtp.naver.com",
-                        sender_id: sendEmail.email,
-                        sender_pw: sendEmail.password,
-                        receiver_id: sendEmail.destinationEmails,
-                        file_name: GetFilePath(doc.preview_path), // filename ??
-                        mail_name: sendEmail.mailTitle,
-                        mail_body: sendEmail.mailContent
-                    };
-                    try {
-                        await writeArgs(Printers, argsSendEmail, removedDoc);
-                        message += "Success";
-                    } catch(error) {
+                    if(await isNullArgs(sendEmail)) {
                         isOk = false;
                         failedCnt += 1;
-                        message += error.message + "\n";
-                    }   
+                        message += `Data is Empty`;
+                    } else {
+                        const argsSendEmail = {
+                            printer_type: "ToMail",
+                            printer_name: `${ groupName } - Send Email`,
+                            mail_server: "smtp.naver.com",
+                            sender_id: sendEmail.email,
+                            sender_pw: sendEmail.password,
+                            receiver_id: sendEmail.destinationEmails,
+                            file_name: GetFilePath(doc.preview_path), // filename ??
+                            mail_name: sendEmail.mailTitle,
+                            mail_body: sendEmail.mailContent
+                        };
+                        try {
+                            await writeArgs(Printers, argsSendEmail, removedDoc);
+                            message += "Success";
+                        } catch(error) {
+                            isOk = false;
+                            failedCnt += 1;
+                            message += error.message + "\n";
+                        }   
+                    }
                     message += ` ].  `;
                 }
 
                 if(restful.isChecked) {
                     taskCount += 1;
                     message += `Operation RESTful [ `;
-                    const argsRestful = {
-                        printer_type: "ToPost", 
-                        printer_name: `${ groupName } - RESTFul`
-                    }
-                    try {
-                        await writeArgs(Printers, argsRestful, removedDoc);
-                        message += "Success";
-                    } catch(error) {
+                    if(await isNullArgs(restful)) {
                         isOk = false;
                         failedCnt += 1;
-                        message += error.message + "\n";
+                        message += `Data is Empty`;
+                    } else {
+                        const argsRestful = {
+                            printer_type: "ToPost", 
+                            printer_name: `${ groupName } - RESTFul`,
+                            end_point: "https://ptsv2.com/t/ubdjt-1573385771/post",
+                            func_code: restful.data
+                        }
+                        try {
+                            await writeArgs(Printers, argsRestful, removedDoc);
+                            message += "Success";
+                        } catch(error) {
+                            isOk = false;
+                            failedCnt += 1;
+                            message += error.message + "\n";
+                        }
                     }
                     message += ` ].  `;
                 }
@@ -205,20 +229,27 @@ const MutationStartForGrouping = {
                 if(redirect.isChecked) {
                     taskCount += 1;
                     message += `Operation Redirect [ `;
-                    const argsRedirect = {
-                        printer_type: "ToSocket",
-                        printer_name: `${ groupName } - Redirect`,
-                        host: redirect.ipAddress,
-                        port: redirect.port
-                    };
-                    try {
-                        await writeArgs(Printers, argsRedirect, removedDoc);
-                        message += "Success" + "\n";
-                    } catch(error) {
+                    if(await isNullArgs(redirect)) {
                         isOk = false;
                         failedCnt += 1;
-                        message += error.message + "\n";
+                        message += `Data is Empty`;
+                    } else {
+                        const argsRedirect = {
+                            printer_type: "ToSocket",
+                            printer_name: `${ groupName } - Redirect`,
+                            host: redirect.ipAddress,
+                            port: redirect.port
+                        };
+                        try {
+                            await writeArgs(Printers, argsRedirect, removedDoc);
+                            message += "Success" + "\n";
+                        } catch(error) {
+                            isOk = false;
+                            failedCnt += 1;
+                            message += error.message + "\n";
+                        }
                     }
+                    
                     message += ` ].  `;
                 }
 
