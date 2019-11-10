@@ -20,6 +20,7 @@
     "nodemon": "^1.19.2",
     "object-hash": "^2.0.0",
     "pify": "^4.0.1",
+    "request": "^2.88.0",
     "steno": "^0.4.4",
     "ts-node": "^8.4.1",
     "typescript": "^3.6.3"

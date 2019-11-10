@@ -4,7 +4,7 @@ import { PrintingMachine } from "./printing-machine";
 import { PrinterManager } from "./lib/printer-manager";
 import { readFileSync } from "fs";
 import { randomBytes } from "crypto";
-
+import request from "request";
 /**
  * (1) 프린터 매니저 구성요소.
  *
@@ -53,16 +53,24 @@ let printer_args = {
     //! <공통>
     //! type : 외부 프린터 모듈 class의 이름
     //! name : 사용자가 지은 프린터 이름
-    printer_type: "ToDisk",
-    printer_name: "disk",
+    printer_type: "ToPost",
+    printer_name: "post",
 
     //! <인자>
     //! 아래부터는 외부 프린터 모듈이 원하는 인자를 전부 적어야 함.
-    file_path: "./",
-    file_name: "example.pdf"
+    end_point: "https://ptsv2.com/t/ubdjt-1573385771/post",
+    func_code: `
+        (doc)=>{
+            let obj = {
+                title: doc.title(),
+                timestamp: doc.timestamp()
+            };
+            return obj;
+        }
+    `
 };
 let printer: Printer = PRINTERS._construct(printer_args);
-// printer.print(test_doc);
+printer.print(test_doc);
 
 /**
  * (4) 프린터 args를 저장하고 불러오기.

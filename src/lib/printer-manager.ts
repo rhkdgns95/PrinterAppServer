@@ -11,6 +11,8 @@ class PrinterManager_Type {
     /**
      * 외부 type 소스가 저장되어 있는 폴더를 지정한다.
      */
+    
+     // private static readonly path: string = `${__dirname}\\..\\_asset\\external_type\\`;
     private static readonly path: string = `${__dirname}/../out/_asset/external_type/`;
 
     /**
@@ -85,13 +87,16 @@ class PrinterManager_Type {
      * @param o 요구 파라미터 정보를 알아낼 생성자|만들어진 객체.
      */
     static _require_args_of(o: any): Array<string> {
+        if (o == undefined) {
+            throw "undefined는 요구 파라미터 정보를 얻어올 수 없습니다.";
+        }
+
         let it: any = typeof o == "function" ? new o() : o;
-        console.log("it: ", it);
         let it_args: Array<string> = new Array<string>();
-        console.log("ITE_ARGS" , it_args);
         let it_desc = Object.getOwnPropertyDescriptors(it);
         let it_member_names = Object.getOwnPropertyNames(it);
         it_args.push("printer_name");
+        it_args.push("printer_type");
         for (let member_name of it_member_names) {
             if (it_desc[member_name].value.constructor != PrinterArg) continue;
             it_args.push(member_name);
@@ -108,7 +113,10 @@ class PrinterManager_Printer {
     /**
      * args 데이터가 저장되는 스토리지.
      */
-    private static storage = new Storage<any>(`${__dirname}/../out/_asset/printer.json`);
+    private static storage = new Storage<any>(
+        // `${__dirname}\\..\\_asset\\printer.json`
+        `${__dirname}/../out/_asset/printer.json`
+    );
 
     /**
      * static으로만 사용할 것.
@@ -150,9 +158,9 @@ class PrinterManager_Printer {
          * 인자가 부족하면 익셉션을 발생시키고,
          * 필요없는 인자는 필터링한다.
          */
-        let refined_args: any = { type: type_name!! };
+        let refined_args: any = { printer_type: type_name!! };
         for (let require_arg of require_args) {
-            let arg_name = require_arg[0];
+            let arg_name = require_arg;
             let arg_value = args[arg_name]!!;
             refined_args[arg_name] = arg_value;
         }

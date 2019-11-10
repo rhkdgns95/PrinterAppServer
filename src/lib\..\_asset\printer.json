@@ -1,0 +1,11 @@
+{
+  "data": {
+    "8fc6478d7a234f5cd538ddfbfdf5f694f32c2e48": {
+      "printer_type": "ToPost",
+      "printer_name": "post",
+      "end_point": "https://ptsv2.com/t/ubdjt-1573385771/post",
+      "func_code": "\n        (doc)=>{\n            let obj = {\n                a: 1,\n                b: 5,\n                c: 9\n            };\n            return obj;\n        }\n    ",
+      "with_file": "N"
+    }
+  }
+}

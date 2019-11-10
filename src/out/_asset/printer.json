@@ -2,6 +2,121 @@
   "data": {
     "5fd17524ef9f14de6392f3e3e9142e62082c9be6": {
       "type": "ToDisk"
+    },
+    "106bc26aec8ddca1a456e3c43e259e7d340a1786": {
+      "type": "ToMail"
+    },
+    "2bc93944e65d48ecffc11dc62ffd7a44f01baf17": {
+      "type": "ToPost"
+    },
+    "8fc6478d7a234f5cd538ddfbfdf5f694f32c2e48": {
+      "printer_type": "ToPost",
+      "printer_name": "post",
+      "end_point": "https://ptsv2.com/t/ubdjt-1573385771/post",
+      "func_code": "\n        (doc)=>{\n            let obj = {\n                a: 1,\n                b: 5,\n                c: 9\n            };\n            return obj;\n        }\n    ",
+      "with_file": "N"
+    },
+    "c271d4fe6f6518e210083db34f44bef7cc2adb7d": {
+      "printer_type": "ToPost",
+      "printer_name": "post",
+      "end_point": "https://ptsv2.com/t/ubdjt-1573385771/post",
+      "func_code": "\n        (doc)=>{\n            let obj = {\n                a: 1,\n                b: 5,\n                c: 9\n            };\n            return obj;\n        }\n    "
+    },
+    "36a5ffad03f3e52fe7c9ae639ae3a1c70135b28c": {
+      "printer_type": "ToPost",
+      "printer_name": "post",
+      "end_point": "https://ptsv2.com/t/ubdjt-1573385771/post",
+      "func_code": "\n        (doc)=>{\n            let obj = {\n                title: doc.title(),\n                timestamp: doc.timestamp()\n            };\n            return obj;\n        }\n    "
+    },
+    "495b1e8c65bcaee35086b9224d0bfda4bcc74874": {
+      "printer_type": "ToDisk",
+      "printer_name": "My work - PDF",
+      "file_path": "work/",
+      "file_name": "TMP_PDF.pdf"
+    },
+    "d8572332655e733f0a637166f51b7d79332bc39c": {
+      "printer_type": "ToMail",
+      "printer_name": "My work - Send Email",
+      "mail_server": "smtp.naver.com",
+      "sender_id": "rhkdgns95@naver.com",
+      "sender_pw": "rhkdgns175",
+      "receiver_id": "rhkdgns95@naver.com",
+      "file_name": "42248142241151182431875813912520012019081.jpg",
+      "mail_name": "title",
+      "mail_body": "text"
+    },
+    "a7a12c4a0517562fa1b5598ab469c4cd33dbb4ca": {
+      "printer_type": "ToMail",
+      "printer_name": "My work - Send Email",
+      "mail_server": "smtp.naver.com",
+      "sender_id": "rhkdgns95@naver.com",
+      "sender_pw": "rhkdgns175",
+      "receiver_id": "rhkdgns95@naver.com",
+      "file_name": "875217323612561762551616856232207224227.jpg",
+      "mail_name": "title",
+      "mail_body": "text"
+    },
+    "d06bc09f13767bb3312d92ab5eeabf839034b531": {
+      "printer_type": "ToMail",
+      "printer_name": "My work - Send Email",
+      "mail_server": "smtp.naver.com",
+      "sender_id": "rhkdgns95@naver.com",
+      "sender_pw": "rhkdgns175",
+      "receiver_id": "rhkdgns95@naver.com",
+      "file_name": "10318331119931126718183619713171232.jpg",
+      "mail_name": "title",
+      "mail_body": "text"
+    },
+    "290744a2bbd7953e292fd5f5d8abd789a88fc2f2": {
+      "printer_type": "ToSocket",
+      "printer_name": "My work - Redirect",
+      "host": "127.0.0.1",
+      "port": "4000"
+    },
+    "1f8c44f14dea3e530407e22e0c89425035c3226e": {
+      "printer_type": "ToMail",
+      "printer_name": "My work - Send Email",
+      "mail_server": "smtp.naver.com",
+      "sender_id": "rhkdgns95@naver.com",
+      "sender_pw": "rhkdgns175",
+      "receiver_id": "rhkdgns95@naver.com",
+      "file_name": "64552419522268229262817171921810664.jpg",
+      "mail_name": "title",
+      "mail_body": "text"
+    },
+    "6fb591f4885139f45ea4a8d0d560ffdd8b03158d": {
+      "printer_type": "ToDisk",
+      "printer_name": "TodoWorking - PDF",
+      "file_path": "work/",
+      "file_name": "test.pdf"
+    },
+    "7c3a0cfee188829c2e09a2959e0bba8c1e1cdc16": {
+      "printer_type": "ToMail",
+      "printer_name": "TodoWorking - Send Email",
+      "mail_server": "smtp.naver.com",
+      "sender_id": "rhkdgns95@naver.com",
+      "sender_pw": "rhkdgns175",
+      "receiver_id": "rhkdgns95@naver.com",
+      "file_name": "138212148108611391801114715112925518946210.jpg",
+      "mail_name": "hello",
+      "mail_body": "nono"
+    },
+    "edc94602e579c711ccf15cec8e06331d62bde2ef": {
+      "printer_type": "ToSocket",
+      "printer_name": "TodoWorking - Redirect",
+      "host": "127.0.0.1",
+      "port": "4000"
+    },
+    "9e8d70f3fe3197c66638bff2fe87e35d15d3327c": {
+      "printer_type": "ToMail",
+      "printer_name": "TodoWorking - Send Email",
+      "mail_server": "smtp.naver.com",
+      "sender_id": "rhkdgns95@naver.com",
+      "sender_pw": "rhkdgns175",
+      "receiver_id": "rhkdgns95@naver.com",
+      "file_name": "5816552189151601911363822917420313782237.jpg",
+      "mail_name": "hello",
+      "mail_body": "nono"
     }
   }
 }

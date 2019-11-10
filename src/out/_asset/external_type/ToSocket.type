@@ -1,11 +1,11 @@
-import net from "net";
+import net = require("net");
 
 class ToSocket {
-    host  :PrinterArg = new PrinterArg("default");
-    port  :PrinterArg = new PrinterArg("9100");
-
+    host  :PrinterArg = new PrinterArg("");
+    port  :PrinterArg = new PrinterArg("");
+    //! 주어진 소켓으로 리다이렉트.
     print (doc: Doc){
-        let net_printer = net.connect({host:this.host, port:Number(this.port)}, function () {
+        let net_printer = net.connect({host:this.host.value(), port:Number(this.port.value())}, function () {
             net_printer.write(doc.val.postscript);
             net_printer.destroy();
         });

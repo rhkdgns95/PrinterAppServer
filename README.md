@@ -10,6 +10,7 @@
 8. yarn add steno
 9. yarn add pify object-hash nodemailer lowdb lodash is-promise graceful-fs 
 10. yarn add image-data-uri
+11. yarn add request
 
 # API
 - [X] AppOptions

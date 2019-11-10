@@ -9,11 +9,6 @@ import { readFileSync } from "fs";
  */
 export class Printer {
     /**
-     * 이 프린터 객체의 이름.
-     */
-    name: PrinterArg = new PrinterArg("");
-
-    /**
      * 주어진 args를 이용하여 Printer 객체를 동적으로 재구성한다.
      * 중간에 문제가 발생하면 익셉션이 발생한다.
      *

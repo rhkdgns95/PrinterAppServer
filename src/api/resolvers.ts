@@ -28,6 +28,18 @@ const QueryGetTest = {
 const StoragePath = `${__dirname}/../out/_asset/converted/`;
 
 /**
+ *  GetFilePath: (path: string) => string;
+ * 
+ *  @param path 
+ *  File의 FullPath로부터 
+ *  순수한 FileName을 가지고온다.
+ */
+const GetFilePath = (path: string): string => {
+    const startIdx: number = path.lastIndexOf("\\");
+    const fileName = path.substr(startIdx + 1);
+    return fileName;
+}
+/**
  *  GetBase64Encode
  * 
  *  먼저, 브라우저에서 로컬파일경로로 접근할수 없다는점을 알아두자.
@@ -39,8 +51,7 @@ const StoragePath = `${__dirname}/../out/_asset/converted/`;
  *  localPath: 로컬에 저장된 파일 경로.
  */
 const GetBase64Encode = (localPath: string): string => {
-    const startIdx: number = localPath.lastIndexOf("\\");
-    const fileName = localPath.substr(startIdx + 1);
+    const fileName: string = GetFilePath(localPath);
     const newPath = `${StoragePath}/${fileName}`;
     var body = fs.readFileSync(newPath);
     return "data:image/png;base64," + body.toString('base64');
@@ -86,29 +97,35 @@ const QueryGetDocs = {
         }
     }
 };
+const isNullArgs = (args: object): boolean => {
+    let isNull: boolean = false;
+     Object.keys(args).forEach(key => {
+        if(args[key] === "")
+            isNull = true;
+    });
+
+    return isNull;
+}
 const writeArgs = (Printers: any, args: any, doc: Doc) => {
-    console.log("시작");
     const printer: Printer = Printers._construct(args);
-    console.log(1);
     printer.print(doc);
-    console.log(2);
     Printers._is_exist_args(args);
-    console.log(3);
     Printers._add_args(args);
-    console.log(4);
-    console.log("끝");
 };
 
 const MutationStartForGrouping = {
     StartForGrouping: privateResolvers( async (_, args: StartForGroupingMutationArgs, {req}): Promise<StartForGroupingMutationResponse> => {
         const { groupId, accepted } = args;
-        console.log("StartForGrouping!", req.grouping[groupId]);
-        console.log("ACCEPTED: ", accepted);
+        
         const docs: Array<DocKey> = req.docs;
         const popDoc: PopDoc = req.pop_doc;
         try {
             const doc: DocKey | undefined = docs.find(doc => doc.accepted === accepted);
             if(doc) {
+                let isOk: boolean = true;
+                let taskCount: number = 0;
+                let failedCnt: number = 0;
+
                 const Printers = PrinterManager._PRINTERS;
                 const Types = PrinterManager._TYPES;
 
@@ -123,58 +140,99 @@ const MutationStartForGrouping = {
                 let message: string = "";
     
                 if(pdf.isChecked) {
-                    console.log("PDF 작업수행");
-                    
-                    const argsPdf = {
-                        printer_type: "ToDisk",
-                        printer_name: `${ groupName } - PDF`,
-                        file_path: pdf.filePath,
-                        file_name: pdf.fileName
-                        /* 누락: file name. */
+                    taskCount += 1;
+                    if(isNullArgs(pdf)) {
+                        message += "Failed(Data is Empty)"
+                    } else {
+                        const argsPdf = {
+                            printer_type: "ToDisk",
+                            printer_name: `${ groupName } - PDF`,
+                            file_path: pdf.filePath,
+                            file_name: pdf.fileName
+                            /* 누락: file name. */
+                        }
+                        try {
+                            writeArgs(Printers, argsPdf, removedDoc);
+                            message += "Success";
+                        } catch(error) {
+                            isOk = false;
+                            failedCnt += 1;
+                            message += error.message + "\n";
+                        }
+                        // message += "PDF 작업수행 <br/>";
                     }
-                    writeArgs(Printers, argsPdf, removedDoc);
-
-                    message += "PDF 작업수행\n";
+                    message = `Operation PDF [ ${message}. ]   ` + "\n";
                 }
-    
                 if(sendEmail.isChecked) {
-                    console.log("Send Email 작업수행");
-                    const argsSendEmail = {
-                        printer_type: "ToMail",
-                        printer_name: `${ groupName } - Send Email`,
-                        mail_server: "",
-                        sender_id: sendEmail.email,
-                        sender_pw: sendEmail.password,
-                        receiver_id: sendEmail.destinationEmails,
-                        file_name: "printerApp", // filename ??
-                        mail_name: sendEmail.mailTitle,
-                        mail_body: sendEmail.mailContent
-                    };
-                    
-                    writeArgs(Printers, argsSendEmail, removedDoc);
-
-                    message += "Send Email 작업수행\n";
+                    taskCount += 1;
+                    if(isNullArgs(sendEmail)) {
+                        message += "Failed(Data is Empty)";
+                    } else {
+                        const argsSendEmail = {
+                            printer_type: "ToMail",
+                            printer_name: `${ groupName } - Send Email`,
+                            mail_server: "smtp.naver.com",
+                            sender_id: sendEmail.email,
+                            sender_pw: sendEmail.password,
+                            receiver_id: sendEmail.destinationEmails,
+                            file_name: GetFilePath(doc.preview_path), // filename ??
+                            mail_name: sendEmail.mailTitle,
+                            mail_body: sendEmail.mailContent
+                        };
+                        try {
+                            writeArgs(Printers, argsSendEmail, removedDoc);
+                            message += "Success";
+                        } catch(error) {
+                            isOk = false;
+                            failedCnt += 1;
+                            message += error.message + "\n";
+                        }   
+                    }
+                    message = `Operation SendEmail [ ${message}. ]   ` + "\n";
                 }
 
                 if(restful.isChecked) {
-                    console.log("RESTFul 작업수행");
-                    const argsRestful = {
-                        printer_type: "ToConsole", 
-                        printer_name: `${ groupName } - RESTFul`
+                    taskCount += 1;
+                    if(isNullArgs(restful)) {
+                        message += "Failed(Data is Empty)";
+                    } else {
+                        const argsRestful = {
+                            printer_type: "ToPost", 
+                            printer_name: `${ groupName } - RESTFul`
+                        }
+                        try {
+                            writeArgs(Printers, argsRestful, removedDoc);
+                            message += "Success";
+                        } catch(error) {
+                            isOk = false;
+                            failedCnt += 1;
+                            message += error.message + "\n";
+                        }
                     }
-                    writeArgs(Printers, argsRestful, removedDoc);
-                    message += "RESTFul 작업수행\n";
+                    message = `Operation RESTful [ ${message}. ]   ` + "\n";
                 }
+
                 if(redirect.isChecked) {
-                    console.log("Redirect 작업 수행");
-                    const argsRedirect = {
-                        printer_type: "ToSocket",
-                        printer_name: `${ groupName } - Redirect`,
-                        host: redirect.ipAddress,
-                        port: redirect.port
-                    };
-                    writeArgs(Printers, argsRedirect, removedDoc);
-                    message += "Redirect 작업 수행\n";
+                    taskCount += 1;
+                    if(isNullArgs(redirect)) {
+                        message += "Failed(Data is Empty)";
+                    } else {
+                        const argsRedirect = {
+                            printer_type: "ToSocket",
+                            printer_name: `${ groupName } - Redirect`,
+                            host: redirect.ipAddress,
+                            port: redirect.port
+                        };
+                        try {
+                            writeArgs(Printers, argsRedirect, removedDoc);
+                            message += "Success" + "\n";
+                        } catch(error) {
+                            isOk = false;
+                            failedCnt += 1;
+                            message += error.message + "\n";
+                        }
+                    }
+                    message = `Operation Redirect [ ${message}. ]   ` + "\n";
                 }
 
                 // let all_args: Map<string, any> = Printers._get_all_args();
@@ -184,9 +242,10 @@ const MutationStartForGrouping = {
                 //     let args_obj = args[1];
                 // }
                 
+                const error: string = `${taskCount - failedCnt} of ${taskCount} Success.`
                 return {
-                    ok: true,
-                    error: null,
+                    ok: isOk,
+                    error,
                     grouping,
                     message
                 };

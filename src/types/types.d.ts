@@ -1,5 +1,5 @@
-import { DocKey } from "../core/src/lib/doc-key";
-import { Doc } from "../core/src/lib/doc";
+import { DocKey } from "../lib/doc-key";
+import { Doc } from "../lib/doc";
 
 type Grouping = {
     groupName: string;

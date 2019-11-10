@@ -1,0 +1,26 @@
+//! POST 요청.
+import request = require("request");
+class ToPost {
+    end_point    :PrinterArg = new PrinterArg("");
+    func_code    :PrinterArg = new PrinterArg("");
+    
+    print (doc: Doc){
+        let __call = eval(this.func_code.value());
+        let json = __call(doc);
+        request.post(
+            {
+                headers: { "content-type": "application/json" },
+                url: this.end_point.value(),
+                body: json,
+                json: true
+            },
+            function(err, res, body) {
+                if (err) {
+                    console.error("POST 요청에 실패했습니다.");
+                } else {
+                    console.log(body);
+                }
+            }
+        );
+    }
+}
