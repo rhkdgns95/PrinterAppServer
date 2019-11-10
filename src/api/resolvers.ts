@@ -97,20 +97,20 @@ const QueryGetDocs = {
         }
     }
 };
-const isNullArgs = (args: object): boolean => {
+const isNullArgs = async (args: object): Promise<boolean> => {
     let isNull: boolean = false;
-     Object.keys(args).forEach(key => {
+    await Object.keys(args).forEach(key => {
         if(args[key] === "")
             isNull = true;
     });
 
     return isNull;
 }
-const writeArgs = (Printers: any, args: any, doc: Doc) => {
-    const printer: Printer = Printers._construct(args);
-    printer.print(doc);
-    Printers._is_exist_args(args);
-    Printers._add_args(args);
+const writeArgs = async (Printers: any, args: any, doc: Doc) => {
+    const printer: Printer = await Printers._construct(args);
+    await printer.print(doc);
+    await Printers._is_exist_args(args);
+    await Printers._add_args(args);
 };
 
 const MutationStartForGrouping = {
@@ -141,98 +141,85 @@ const MutationStartForGrouping = {
     
                 if(pdf.isChecked) {
                     taskCount += 1;
-                    if(isNullArgs(pdf)) {
-                        message += "Failed(Data is Empty)"
-                    } else {
-                        const argsPdf = {
-                            printer_type: "ToDisk",
-                            printer_name: `${ groupName } - PDF`,
-                            file_path: pdf.filePath,
-                            file_name: pdf.fileName
-                            /* 누락: file name. */
-                        }
-                        try {
-                            writeArgs(Printers, argsPdf, removedDoc);
-                            message += "Success";
-                        } catch(error) {
-                            isOk = false;
-                            failedCnt += 1;
-                            message += error.message + "\n";
-                        }
-                        // message += "PDF 작업수행 <br/>";
+                    const argsPdf = {
+                        printer_type: "ToDisk",
+                        printer_name: `${ groupName } - PDF`,
+                        file_path: pdf.filePath,
+                        file_name: pdf.fileName
+                        /* 누락: file name. */
                     }
-                    message = `Operation PDF [ ${message}. ]   ` + "\n";
+                    message += `Operation PDF [ `;
+                    try {
+                        await writeArgs(Printers, argsPdf, removedDoc);
+                        message += "Success";
+                    } catch(error) {
+                        isOk = false;
+                        failedCnt += 1;
+                        message += error.message + "\n";
+                    }
+                    message += ` ].  ` + "\n";
                 }
                 if(sendEmail.isChecked) {
                     taskCount += 1;
-                    if(isNullArgs(sendEmail)) {
-                        message += "Failed(Data is Empty)";
-                    } else {
-                        const argsSendEmail = {
-                            printer_type: "ToMail",
-                            printer_name: `${ groupName } - Send Email`,
-                            mail_server: "smtp.naver.com",
-                            sender_id: sendEmail.email,
-                            sender_pw: sendEmail.password,
-                            receiver_id: sendEmail.destinationEmails,
-                            file_name: GetFilePath(doc.preview_path), // filename ??
-                            mail_name: sendEmail.mailTitle,
-                            mail_body: sendEmail.mailContent
-                        };
-                        try {
-                            writeArgs(Printers, argsSendEmail, removedDoc);
-                            message += "Success";
-                        } catch(error) {
-                            isOk = false;
-                            failedCnt += 1;
-                            message += error.message + "\n";
-                        }   
-                    }
-                    message = `Operation SendEmail [ ${message}. ]   ` + "\n";
+                    message += `Operation SendEmail [ `;
+                    const argsSendEmail = {
+                        printer_type: "ToMail",
+                        printer_name: `${ groupName } - Send Email`,
+                        mail_server: "smtp.naver.com",
+                        sender_id: sendEmail.email,
+                        sender_pw: sendEmail.password,
+                        receiver_id: sendEmail.destinationEmails,
+                        file_name: GetFilePath(doc.preview_path), // filename ??
+                        mail_name: sendEmail.mailTitle,
+                        mail_body: sendEmail.mailContent
+                    };
+                    try {
+                        await writeArgs(Printers, argsSendEmail, removedDoc);
+                        message += "Success";
+                    } catch(error) {
+                        isOk = false;
+                        failedCnt += 1;
+                        message += error.message + "\n";
+                    }   
+                    message += ` ].  `;
                 }
 
                 if(restful.isChecked) {
                     taskCount += 1;
-                    if(isNullArgs(restful)) {
-                        message += "Failed(Data is Empty)";
-                    } else {
-                        const argsRestful = {
-                            printer_type: "ToPost", 
-                            printer_name: `${ groupName } - RESTFul`
-                        }
-                        try {
-                            writeArgs(Printers, argsRestful, removedDoc);
-                            message += "Success";
-                        } catch(error) {
-                            isOk = false;
-                            failedCnt += 1;
-                            message += error.message + "\n";
-                        }
+                    message += `Operation RESTful [ `;
+                    const argsRestful = {
+                        printer_type: "ToPost", 
+                        printer_name: `${ groupName } - RESTFul`
                     }
-                    message = `Operation RESTful [ ${message}. ]   ` + "\n";
+                    try {
+                        await writeArgs(Printers, argsRestful, removedDoc);
+                        message += "Success";
+                    } catch(error) {
+                        isOk = false;
+                        failedCnt += 1;
+                        message += error.message + "\n";
+                    }
+                    message += ` ].  `;
                 }
 
                 if(redirect.isChecked) {
                     taskCount += 1;
-                    if(isNullArgs(redirect)) {
-                        message += "Failed(Data is Empty)";
-                    } else {
-                        const argsRedirect = {
-                            printer_type: "ToSocket",
-                            printer_name: `${ groupName } - Redirect`,
-                            host: redirect.ipAddress,
-                            port: redirect.port
-                        };
-                        try {
-                            writeArgs(Printers, argsRedirect, removedDoc);
-                            message += "Success" + "\n";
-                        } catch(error) {
-                            isOk = false;
-                            failedCnt += 1;
-                            message += error.message + "\n";
-                        }
+                    message += `Operation Redirect [ `;
+                    const argsRedirect = {
+                        printer_type: "ToSocket",
+                        printer_name: `${ groupName } - Redirect`,
+                        host: redirect.ipAddress,
+                        port: redirect.port
+                    };
+                    try {
+                        await writeArgs(Printers, argsRedirect, removedDoc);
+                        message += "Success" + "\n";
+                    } catch(error) {
+                        isOk = false;
+                        failedCnt += 1;
+                        message += error.message + "\n";
                     }
-                    message = `Operation Redirect [ ${message}. ]   ` + "\n";
+                    message += ` ].  `;
                 }
 
                 // let all_args: Map<string, any> = Printers._get_all_args();

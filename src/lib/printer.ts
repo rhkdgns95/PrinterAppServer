@@ -53,7 +53,7 @@ export class Printer {
      *
      * @param doc 출력할 문서.
      */
-    print(doc: Doc): void {
+    async print(doc: Doc): Promise<void> {
         throw `please implement print method.`;
     }
 }
